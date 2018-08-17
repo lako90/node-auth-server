@@ -1,0 +1,96 @@
+{
+  "environment": "development",
+
+  "certs": {
+    "fullChain": "../certs/default/fullchain.pem",
+    "privKey": "../certs/default/privkey.pem"
+  },
+
+  "databases": {
+    "uaa": {
+      "dialect": "<DATABASE_DIALECT>",
+      "database": "<DATABASE_NAME>",
+      "username": "<DATABASE_USERNAME>",
+      "password": "<DATABASE_PASSWORD>",
+      "host": "<DATABASE_HOSTNAME>",
+      "port": "<DATABASE_PORT>",
+      "url": false,
+      "dialectOptions": {
+        "ssl": true
+      },
+      "adminUser": {
+        "name": "admin",
+        "password": "admin",
+        "email": "admin@admin.com",
+        "superadmin": true
+      }
+    }
+  },
+
+  "ddos": {
+    "burst": 100000,
+    "limit": 1000000,
+    "dsn": "localhost:4040"
+  },
+
+  "debug": {
+    "enabled": true,
+    "nats": {
+      "enabled": true
+    },
+    "http": {
+      "enabled": true
+    }
+  },
+
+  "general": {
+    "timeToCheckExpiredTokens": 3600
+  },
+
+  "keygen": {
+    "ext_key": "56k1gczixbpy9u7vkjpewu6u5xwd0dx8nq2ujkjj",
+    "int_key": "edvx2f5k53ehfz185mvspjo52sfekt395w100hq2",
+    "port": 80
+  },
+
+  "jwt": {
+    "accessToken": {
+      "expiresIn": 60,
+      "secret": "s3cr3tAcc3ssT0k3n@H1r1sUAA"
+    },
+    "refreshToken": {
+      "expiresIn": 3600,
+      "secret": "s3cr3tR3fr3shT0k3n@H1r1sUAA"
+    }
+  },
+
+  "logger": {
+    "level": "silly",
+    "silent": false
+  },
+
+  "resourceTypes": [
+    "Application",
+    "Pipelines",
+    "Microservices",
+    "Api",
+    "Datasources",
+    "Event Hub",
+    "Grafana",
+    "Functions",
+    "Users",
+    "Groups",
+    "Roles",
+    "Repository"
+  ],
+
+  "server": {
+    "logFormat": "dev",
+    "port": 8443
+  },
+
+  "session": {
+    "maxAge": 86400000,
+    "secret": "7c0jqjkgy6c4zpoi8hvettrawo1blqh9gb07qa22"
+  }
+}

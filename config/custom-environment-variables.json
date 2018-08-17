@@ -1,0 +1,41 @@
+{
+  "debug": {
+    "enabled": "DEBUG_ENABLED",
+    "nats": {
+      "enabled": "DEBUG_ENABLED"
+    },
+    "http": {
+      "enabled": "DEBUG_ENABLED"
+    }
+  },
+  "databases": {
+    "uaa": {
+      "dialect": "SQL_UAA_DIALECT",
+      "database": "SQL_UAA_DATABASE",
+      "username": "SQL_UAA_USERNAME",
+      "password": "SQL_UAA_PASSWORD",
+      "host": "SQL_UAA_HOST",
+      "port": "SQL_UAA_PORT",
+      "url": "SQL_UAA_URL"
+    },
+    "adminUser": {
+      "name": "ADMIN_USER_NAME",
+      "password": "ADMIN_USER_PASSWORD",
+      "email": "ADMIN_USER_EMAIL",
+      "superadmin": "ADMIN_USER_SUPERADMIN"
+    }
+  },
+  "jwt": {
+    "accessToken": {
+      "expiresIn": "ACCESS_TOKEN_EXPIRES_IN",
+      "secret": "ACCESS_TOKEN_SECRET"
+    },
+    "refreshToken": {
+      "expiresIn": "REFRESH_TOKEN_EXPIRES_IN",
+      "secret": "REFRESH_TOKEN_SECRET"
+    }
+  },
+  "server": {
+    "port": "SERVER_PORT"
+  }
+}

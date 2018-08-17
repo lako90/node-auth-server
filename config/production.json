@@ -1,0 +1,14 @@
+{
+  "environment": "production",
+
+  "logger": {
+    "level": "info"
+  },
+
+  "general": {
+    "server": {
+      "logFormat": "prod",
+      "port": 443
+    }
+  }
+}
