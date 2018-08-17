@@ -16,12 +16,12 @@ const Group = sequelize.define('group', {
 Group.associate = () => {
   /* eslint-disable import/no-dynamic-require, global-require */
   const Role = require('./role');
-  const Tenant = require('./tenant');
+  const Client = require('./client');
   /* eslint-enable import/no-dynamic-require, global-require */
 
   Group.hasMany(Role);
 
-  Group.belongsTo(Tenant);
+  Group.belongsTo(Client);
 };
 
 

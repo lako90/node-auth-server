@@ -54,12 +54,12 @@ const User = sequelize.define('user', {
 User.associate = () => {
   /* eslint-disable import/no-dynamic-require, global-require */
   const Role = require('./role');
-  const Tenant = require('./tenant');
+  const Client = require('./client');
   /* eslint-enable import/no-dynamic-require, global-require */
 
   User.belongsTo(Role);
-  User.belongsTo(Tenant); // User is tenant
-  User.belongsTo(Tenant, { as: 'owned', foreignKey: 'ownerId' }); // Which tenant owned
+  User.belongsTo(Client); // User is client
+  User.belongsTo(Client, { as: 'owned', foreignKey: 'ownerId' }); // Which client owned
 };
 
 
@@ -94,8 +94,8 @@ User.prototype.generateTokens = function generateTokens() {
 User.prototype.toAuthJSON = async function toAuthJSON() {
   const { accessToken, refreshToken } = this.generateTokens();
 
-  const [tenant, role] = await Promise.all([
-    this.getTenant({
+  const [client, role] = await Promise.all([
+    this.getClient({
       attributes: ['name'],
     }),
     this.getRole({
@@ -132,7 +132,7 @@ User.prototype.toAuthJSON = async function toAuthJSON() {
     accessToken,
     refreshToken,
     role,
-    tenant,
+    client,
   };
 };
 

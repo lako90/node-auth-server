@@ -3,9 +3,9 @@ const Group = require('../models/group');
 
 const checkAdministrator = async user => await user.get('superadmin');
 
-const checkTenant = async (user) => {
+const checkClient = async (user) => {
   try {
-    return await user.getTenant() || false;
+    return await user.getClient() || false;
   } catch (err) {
     return false;
   }
@@ -28,14 +28,14 @@ const checkAuthorizations = permissions => async (req, res, next) => {
   }
 
   /**
-   * Tenant
+   * Client
    */
-  if (requiredPermissions.includes('tenant')) {
-    const tenant = await checkTenant(user);
+  if (requiredPermissions.includes('client')) {
+    const client = await checkClient(user);
 
-    if (tenant) {
-      res.locals.tenant = tenant; // eslint-disable-line no-param-reassign
-      checkPermissions.push('tenant');
+    if (client) {
+      res.locals.client = client; // eslint-disable-line no-param-reassign
+      checkPermissions.push('client');
     }
   }
 
@@ -48,11 +48,11 @@ const checkAuthorizations = permissions => async (req, res, next) => {
 
 const groupSelected = async (req, res, next) => {
   const { 'group-id': groupId } = req.headers;
-  const { tenant } = res.locals;
+  const { client } = res.locals;
 
   const group = await Group.findById(groupId);
 
-  if (group && await tenant.hasGroup(group)) {
+  if (group && await client.hasGroup(group)) {
     res.locals.group = group; // eslint-disable-line no-param-reassign
 
     return next();

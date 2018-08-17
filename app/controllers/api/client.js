@@ -3,67 +3,67 @@ const AbstractController = require('..');
 const refreshTokenAuthentication = require('../../libraries/auth');
 const { checkAuthorizations } = require('../../libraries/middlewares');
 
-const Tenant = require('../../models/tenant');
+const Client = require('../../models/client');
 const Role = require('../../models/role');
 const User = require('../../models/user');
 const Permission = require('../../models/permission');
 
-class TenantController extends AbstractController {
+class ClientController extends AbstractController {
   initRouter() {
     const {
-      getTenants,
-      postTenant,
-      putTenant,
-      deleteTenant,
-    } = TenantController;
+      getClients,
+      postClient,
+      putClient,
+      deleteClient,
+    } = ClientController;
 
     this.router.get(
       '/',
       refreshTokenAuthentication,
       checkAuthorizations('administrator'),
-      getTenants,
+      getClients,
     );
 
     this.router.post(
       '/',
       refreshTokenAuthentication,
       checkAuthorizations('administrator'),
-      postTenant,
+      postClient,
     );
 
     this.router.put(
-      '/:tenantId',
+      '/:clientId',
       refreshTokenAuthentication,
       checkAuthorizations('administrator'),
-      putTenant,
+      putClient,
     );
 
     this.router.delete(
-      '/:tenantId',
+      '/:clientId',
       refreshTokenAuthentication,
       checkAuthorizations('administrator'),
-      deleteTenant,
+      deleteClient,
     );
   }
 
   /**
-   * Get Tenants
+   * Get Clients
    */
-  static async getTenants(req, res) {
-    const tenants = await Tenant.findAll({
+  static async getClients(req, res) {
+    const clients = await Client.findAll({
       attributes: ['id', 'name'],
     });
 
-    return res.json({ tenants });
+    return res.json({ clients });
   }
 
   /**
-   * Insert Tenant
+   * Insert Client
    */
-  static async postTenant(req, res) {
-    const { tenant, usersId } = req.body;
+  static async postClient(req, res) {
+    const { client, usersId } = req.body;
 
-    if (!tenant.name) {
+    if (!client.name) {
       return res.status(422).json({
         errors: {
           name: 'is required',
@@ -72,11 +72,11 @@ class TenantController extends AbstractController {
     }
 
     try {
-      const newTenant = await Tenant.create(tenant);
-      TenantController.setTenantUsers(newTenant, usersId);
+      const newClient = await Client.create(client);
+      ClientController.setClientUsers(newClient, usersId);
 
       return res.status(200).json({
-        tenant: newTenant,
+        client: newClient,
       });
     } catch (err) {
       return res.status(400).send(err);
@@ -84,25 +84,25 @@ class TenantController extends AbstractController {
   }
 
   /**
-   * Edit Tenant
+   * Edit Client
    */
-  static async putTenant(req, res) {
+  static async putClient(req, res) {
     const {
-      body: { tenant, ownedId, usersId },
-      params: { tenantId },
+      body: { client, ownedId, usersId },
+      params: { clientId },
     } = req;
 
-    const foundTenant = await Tenant.findById(tenantId);
+    const foundClient = await Client.findById(clientId);
 
-    if (foundTenant) {
-      if (tenant) {
-        await foundTenant.update(tenant);
+    if (foundClient) {
+      if (client) {
+        await foundClient.update(client);
       }
 
-      TenantController.setTenantUsers(foundTenant, usersId);
-      TenantController.setTenantOwned(foundTenant, ownedId);
+      ClientController.setClientUsers(foundClient, usersId);
+      ClientController.setClientOwned(foundClient, ownedId);
 
-      return res.status(200).send(foundTenant);
+      return res.status(200).send(foundClient);
     }
 
     return res.status(400).send({
@@ -111,21 +111,21 @@ class TenantController extends AbstractController {
   }
 
   /**
-   * Delete Tenant
+   * Delete Client
    */
-  static async deleteTenant(req, res) {
-    const { tenantId } = req.params;
-    const tenant = await Tenant.findById(tenantId);
+  static async deleteClient(req, res) {
+    const { clientId } = req.params;
+    const client = await Client.findById(clientId);
     const [
       authorizations,
       groups,
       users,
       owned,
     ] = await Promise.all([
-      tenant.getAuthorizations(),
-      tenant.getGroups(),
-      tenant.getUsers(),
-      tenant.getOwner(),
+      client.getAuthorizations(),
+      client.getGroups(),
+      client.getUsers(),
+      client.getOwner(),
     ]);
 
     try {
@@ -148,39 +148,39 @@ class TenantController extends AbstractController {
         owned.forEach(async singleOwned => await singleOwned.destroy()),
       ]);
 
-      await tenant.destroy();
+      await client.destroy();
     } catch (err) {
       return res.status(500).send(err);
     }
 
-    return res.status(200).send(tenantId);
+    return res.status(200).send(clientId);
   }
 
   /**
    * Set Users
-   * With 'users' is mean the tenant administrator
+   * With 'users' is mean the client administrator
    */
-  static async setTenantUsers(tenant, usersId) {
+  static async setClientUsers(client, usersId) {
     if (usersId) {
       const selectedUsers = await User.findAll({ where: { id: usersId } });
       selectedUsers.forEach(async (user) => {
-        await user.setUser(tenant);
+        await user.setUser(client);
       });
     }
   }
 
   /**
    * Set owned
-   * With 'owned' is mean the users who belong at the tenant
+   * With 'owned' is mean the users who belong at the client
    */
-  static async setTenantOwned(tenant, ownedId) {
+  static async setClientOwned(client, ownedId) {
     if (ownedId) {
       const selectedUsers = await User.findAll({ where: { id: ownedId } });
       selectedUsers.forEach(async (user) => {
-        await user.setOwned(tenant);
+        await user.setOwned(client);
       });
     }
   }
 }
 
-module.exports = TenantController;
+module.exports = ClientController;

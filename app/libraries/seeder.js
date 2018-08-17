@@ -11,7 +11,7 @@ const environment = config.get('environment');
 const adminUser = config.get('databases.uaa.adminUser');
 
 const ResourceType = require('../models/resourceType');
-const Tenant = require('../models/tenant');
+const Client = require('../models/client');
 const Group = require('../models/group');
 const Role = require('../models/role');
 const User = require('../models/user');
@@ -114,12 +114,12 @@ const developmentSeeder = async () => {
     [],
   ));
 
-  const fakeTenantUsers = await User.create({
-    name: 'UserTheTenant',
-    email: 'user@tenant.com',
-    password: 'tenanttenant',
+  const fakeClientUsers = await User.create({
+    name: 'UserTheClient',
+    email: 'user@client.com',
+    password: 'client',
   });
-  const seedTenant = await Tenant.create({ name: 'TheTenant' });
+  const seedClient = await Client.create({ name: 'TheClient' });
   const resourceTypes = await ResourceType.all();
   const fakeGroups = await createModel(Group, 'group', groupsCount);
   const fakeRoleUsers = await createModel(User, 'user', roleUsersCount);
@@ -148,11 +148,11 @@ const developmentSeeder = async () => {
   });
 
   await Promise.all([
-    seedTenant.setUsers(fakeTenantUsers),
-    seedTenant.setOwner(fakeRoleUsers),
-    seedTenant.setGroups(fakeGroups),
-    seedTenant.setPermissions(fakePermissions),
-    seedTenant.setAuthorizations(fakeAuthorizations),
+    seedClient.setUsers(fakeClientUsers),
+    seedClient.setOwner(fakeRoleUsers),
+    seedClient.setGroups(fakeGroups),
+    seedClient.setPermissions(fakePermissions),
+    seedClient.setAuthorizations(fakeAuthorizations),
   ]);
 
   await Promise.all(fakeGroups.reduce(

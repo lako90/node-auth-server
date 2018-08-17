@@ -18,28 +18,28 @@ class UserController extends AbstractController {
     this.router.get(
       '/',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       getUsers,
     );
 
     this.router.post(
       '/',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       postUser,
     );
 
     this.router.put(
       '/:userId',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       putUser,
     );
 
     this.router.delete(
       '/:userId?',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       deleteUsers,
     );
   }
@@ -48,9 +48,9 @@ class UserController extends AbstractController {
    * Get Users
    */
   static async getUsers(req, res) {
-    const { tenant } = res.locals;
+    const { client } = res.locals;
 
-    const owned = await tenant.getOwner({
+    const owned = await client.getOwner({
       attributes: ['id', 'name', 'email'],
       include: {
         model: Role,
@@ -66,7 +66,7 @@ class UserController extends AbstractController {
    */
   static async postUser(req, res) {
     const { user } = req.body;
-    const { tenant } = res.locals;
+    const { client } = res.locals;
 
     if (!user.email) {
       return res.status(422).json({
@@ -87,7 +87,7 @@ class UserController extends AbstractController {
     try {
       const newUser = await User.create(user);
 
-      await tenant.addOwner(newUser);
+      await client.addOwner(newUser);
 
       return res.status(200).json(await newUser.toAuthJSON());
     } catch (err) {
@@ -103,11 +103,11 @@ class UserController extends AbstractController {
       body: { user },
       params: { userId },
     } = req;
-    const { tenant } = res.locals;
+    const { client } = res.locals;
 
     const foundUser = await User.findById(userId);
 
-    if (foundUser && await tenant.hasOwner(userId)) {
+    if (foundUser && await client.hasOwner(userId)) {
       await foundUser.update(user);
 
       return res.status(200).send(foundUser);
@@ -127,11 +127,11 @@ class UserController extends AbstractController {
       body: { usersId },
       params: { userId },
     } = req;
-    const { tenant } = res.locals;
+    const { client } = res.locals;
 
     const selectedUsers = userId || usersId;
 
-    if (await tenant.hasOwner(selectedUsers)) {
+    if (await client.hasOwner(selectedUsers)) {
       await User.destroy({ where: { id: selectedUsers } });
 
       return res.status(200).send(selectedUsers);

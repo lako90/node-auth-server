@@ -18,7 +18,7 @@ class RoleController extends AbstractController {
     this.router.get(
       '/',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       groupSelected,
       getRoles,
     );
@@ -26,7 +26,7 @@ class RoleController extends AbstractController {
     this.router.post(
       '/',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       groupSelected,
       postRole,
     );
@@ -34,21 +34,21 @@ class RoleController extends AbstractController {
     this.router.put(
       '/:roleId',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       putRole,
     );
 
     this.router.delete(
       '/:roleId?',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       deleteRoles,
     );
 
     this.router.get(
       '/all',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       getAllRoles,
     );
   }
@@ -100,12 +100,12 @@ class RoleController extends AbstractController {
       body: { role },
       params: { roleId },
     } = req;
-    const { tenant } = res.locals;
+    const { client } = res.locals;
 
     const foundRole = await Role.findById(roleId);
     const group = await foundRole.getGroup();
 
-    if (foundRole && group && await tenant.hasGroup(group.id)) {
+    if (foundRole && group && await client.hasGroup(group.id)) {
       await foundRole.update(role);
 
       return res.status(200).send(foundRole);
@@ -125,14 +125,14 @@ class RoleController extends AbstractController {
       body: { rolesId },
       params: { roleId },
     } = req;
-    const { tenant } = res.locals;
+    const { client } = res.locals;
 
     const selectedRoles = roleId || rolesId;
 
     const foundRole = await Role.findOne({ where: { id: selectedRoles } });
     const group = await foundRole.getGroup();
 
-    if (group && await tenant.hasGroup(group.id)) {
+    if (group && await client.hasGroup(group.id)) {
       await Role.destroy({ where: { id: selectedRoles } });
 
       return res.status(200).send(selectedRoles);
@@ -147,9 +147,9 @@ class RoleController extends AbstractController {
    * Get all Roles ignoring Group
    */
   static async getAllRoles(req, res) {
-    const { tenant } = res.locals;
+    const { client } = res.locals;
 
-    const groups = await tenant.getGroups();
+    const groups = await client.getGroups();
 
     const roles = await Promise.all(
       groups.map(group => group.getRoles({

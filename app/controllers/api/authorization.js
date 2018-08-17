@@ -19,28 +19,28 @@ class AuthorizationController extends AbstractController {
     this.router.get(
       '/',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       getAuthorizations,
     );
 
     this.router.post(
       '/',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       postAuthorization,
     );
 
     this.router.put(
       '/:authorizationId',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       putAuthorization,
     );
 
     this.router.delete(
       '/:authorizationId?',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       deleteAuthorizations,
     );
   }
@@ -49,9 +49,9 @@ class AuthorizationController extends AbstractController {
    * Get Authorizations
    */
   static async getAuthorizations(req, res) {
-    const { tenant } = res.locals;
+    const { client } = res.locals;
 
-    const authorizations = await tenant.getAuthorizations({
+    const authorizations = await client.getAuthorizations({
       attributes: ['id', 'name'],
       include: {
         model: Permission,
@@ -71,7 +71,7 @@ class AuthorizationController extends AbstractController {
    */
   static async postAuthorization(req, res) {
     const { authorization, permissionsId } = req.body;
-    const { tenant } = res.locals;
+    const { client } = res.locals;
 
     if (!authorization.name) {
       return res.status(422).json({
@@ -87,7 +87,7 @@ class AuthorizationController extends AbstractController {
       AuthorizationController.setAuthorizationPermissions(newAuthorization, permissionsId);
 
       return res.status(200).json({
-        authorization: await newAuthorization.setTenant(tenant),
+        authorization: await newAuthorization.setClient(client),
       });
     } catch (err) {
       return res.status(400).send(err);
@@ -102,11 +102,11 @@ class AuthorizationController extends AbstractController {
       body: { authorization, permissionsId },
       params: { authorizationId },
     } = req;
-    const { tenant } = res.locals;
+    const { client } = res.locals;
 
     const foundAuthorization = await Authorization.findById(authorizationId);
 
-    if (foundAuthorization && await tenant.hasAuthorization(authorizationId)) {
+    if (foundAuthorization && await client.hasAuthorization(authorizationId)) {
       if (authorization) {
         await foundAuthorization.update(authorization);
       }
@@ -128,11 +128,11 @@ class AuthorizationController extends AbstractController {
       body: { authorizationsId },
       params: { authorizationId },
     } = req;
-    const { tenant } = res.locals;
+    const { client } = res.locals;
 
     const selectedAuthorizations = authorizationId || authorizationsId;
 
-    if (await tenant.hasAuthorization(selectedAuthorizations)) {
+    if (await client.hasAuthorization(selectedAuthorizations)) {
       await Authorization.destroy({ where: { id: selectedAuthorizations } });
 
       return res.status(200).send(selectedAuthorizations);

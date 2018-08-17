@@ -21,12 +21,12 @@ const Permission = sequelize.define('permission', {
 
 Permission.associate = () => {
   /* eslint-disable import/no-dynamic-require, global-require */
-  const Tenant = require('./tenant');
+  const Client = require('./client');
   const ResourceType = require('./resourceType');
   const Authorization = require('./authorization');
   /* eslint-enable import/no-dynamic-require, global-require */
 
-  Permission.belongsTo(Tenant);
+  Permission.belongsTo(Client);
   Permission.belongsTo(ResourceType);
   Permission.belongsToMany(Authorization, { through: 'PermissionAuthorization' });
 };

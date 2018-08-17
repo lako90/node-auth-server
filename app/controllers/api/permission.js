@@ -18,28 +18,28 @@ class PermissionController extends AbstractController {
     this.router.get(
       '/',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       getPermissions,
     );
 
     this.router.post(
       '/',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       postPermission,
     );
 
     this.router.put(
       '/:permissionId',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       putPermission,
     );
 
     this.router.delete(
       '/:permissionId?',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       deletePermissions,
     );
   }
@@ -48,9 +48,9 @@ class PermissionController extends AbstractController {
    * Get Permissions
    */
   static async getPermissions(req, res) {
-    const { tenant } = res.locals;
+    const { client } = res.locals;
 
-    const permissions = await tenant.getPermissions({
+    const permissions = await client.getPermissions({
       attributes: ['id', 'consent', 'limit'],
       include: {
         model: ResourceType,
@@ -66,7 +66,7 @@ class PermissionController extends AbstractController {
    */
   static async postPermission(req, res) {
     const { permission, resourceType } = req.body;
-    const { tenant } = res.locals;
+    const { client } = res.locals;
 
     if (!permission.consent) {
       return res.status(422).json({
@@ -82,7 +82,7 @@ class PermissionController extends AbstractController {
       await newPermission.setResourceType(selectedResourceType);
 
       return res.status(200).json({
-        role: await newPermission.setTenant(tenant),
+        role: await newPermission.setClient(client),
       });
     } catch (err) {
       return res.status(400).send(err);
@@ -97,11 +97,11 @@ class PermissionController extends AbstractController {
       body: { permission },
       params: { permissionId },
     } = req;
-    const { tenant } = res.locals;
+    const { client } = res.locals;
 
     const foundPermission = await Permission.findById(permissionId);
 
-    if (foundPermission && await tenant.hasPermission(permissionId)) {
+    if (foundPermission && await client.hasPermission(permissionId)) {
       await foundPermission.update(permission);
 
       return res.status(200).send(foundPermission);
@@ -120,11 +120,11 @@ class PermissionController extends AbstractController {
       body: { permissionsId },
       params: { permissionId },
     } = req;
-    const { tenant } = res.locals;
+    const { client } = res.locals;
 
     const selectedPermissions = permissionId || permissionsId;
 
-    if (await tenant.hasPermission(selectedPermissions)) {
+    if (await client.hasPermission(selectedPermissions)) {
       await Permission.destroy({ where: { id: selectedPermissions } });
 
       return res.status(200).send(selectedPermissions);

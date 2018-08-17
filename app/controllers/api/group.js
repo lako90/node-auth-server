@@ -18,28 +18,28 @@ class GroupController extends AbstractController {
     this.router.get(
       '/',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       getGroups,
     );
 
     this.router.post(
       '/',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       postGroup,
     );
 
     this.router.put(
       '/:groupId',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       putGroup,
     );
 
     this.router.delete(
       '/:groupId',
       refreshTokenAuthentication,
-      checkAuthorizations('tenant'),
+      checkAuthorizations('client'),
       deleteGroup,
     );
   }
@@ -48,9 +48,9 @@ class GroupController extends AbstractController {
    * Get Groups
    */
   static async getGroups(req, res) {
-    const { tenant } = res.locals;
+    const { client } = res.locals;
 
-    const groups = await tenant.getGroups({
+    const groups = await client.getGroups({
       attributes: ['id', 'name'],
     });
 
@@ -62,7 +62,7 @@ class GroupController extends AbstractController {
    */
   static async postGroup(req, res) {
     const { group } = req.body;
-    const { tenant } = res.locals;
+    const { client } = res.locals;
 
     if (!group.name) {
       return res.status(422).json({
@@ -76,7 +76,7 @@ class GroupController extends AbstractController {
       const newGroup = await Group.create(group);
 
       return res.status(200).json({
-        group: await newGroup.setTenant(tenant),
+        group: await newGroup.setClient(client),
       });
     } catch (err) {
       return res.status(400).send(err);
@@ -91,11 +91,11 @@ class GroupController extends AbstractController {
       body: { group },
       params: { groupId },
     } = req;
-    const { tenant } = res.locals;
+    const { client } = res.locals;
 
     const foundGroup = await Group.findById(groupId);
 
-    if (foundGroup && group && await tenant.hasGroup(groupId)) {
+    if (foundGroup && group && await client.hasGroup(groupId)) {
       await foundGroup.update(group);
 
       return res.status(200).send(foundGroup);
@@ -112,9 +112,9 @@ class GroupController extends AbstractController {
    */
   static async deleteGroup(req, res) {
     const { groupId } = req.params;
-    const { tenant } = res.locals;
+    const { client } = res.locals;
 
-    if (await tenant.hasGroup(groupId)) {
+    if (await client.hasGroup(groupId)) {
       const group = await Group.findById(groupId);
       const roles = await group.getRoles();
 

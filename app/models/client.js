@@ -1,6 +1,6 @@
 const { Sequelize, sequelize } = require('../libraries/database');
 
-const Tenant = sequelize.define('tenant', {
+const Client = sequelize.define('client', {
   id: {
     type: Sequelize.UUID,
     primaryKey: true,
@@ -13,7 +13,7 @@ const Tenant = sequelize.define('tenant', {
   },
 });
 
-Tenant.associate = () => {
+Client.associate = () => {
   /* eslint-disable import/no-dynamic-require, global-require */
   const User = require('./user');
   const Group = require('./group');
@@ -21,14 +21,14 @@ Tenant.associate = () => {
   const Permission = require('./permission');
   /* eslint-enable import/no-dynamic-require, global-require */
 
-  Tenant.hasMany(User);
-  Tenant.hasMany(User, { as: 'owner', foreignKey: 'ownerId' });
+  Client.hasMany(User);
+  Client.hasMany(User, { as: 'owner', foreignKey: 'ownerId' });
 
   // As owner
-  Tenant.hasMany(Group);
-  Tenant.hasMany(Authorization);
-  Tenant.hasMany(Permission);
+  Client.hasMany(Group);
+  Client.hasMany(Authorization);
+  Client.hasMany(Permission);
 };
 
 
-module.exports = Tenant;
+module.exports = Client;

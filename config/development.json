@@ -2,7 +2,7 @@
   "environment": "development",
 
   "seeder": {
-    "tenantUsersCount": 2,
+    "clientUsersCount": 2,
     "groupsCount": 2,
     "rolesCount": 4,
     "roleUsersCount": 8,
