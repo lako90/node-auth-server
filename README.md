@@ -1,7 +1,7 @@
-Hiris Authorization Server
+Sample Authentication and Authorization Server
 ==================
 
-This is the authorization server to Hiris.io.
+This is a sample authentication and authorization server using node and express.
 
 # Installation
 In this guide has been used _Yarn_ as package manager, but if you want you can use _NPM_ instead.
@@ -12,7 +12,7 @@ yarn
 ```
 
 # Configuration
-To configure this project has been used [node-config](https://www.npmjs.com/package/config) package, there is a _config_ directory to handle the environments; if you need you own configuration please create a _local.json_ file with yours parameters within.
+To configure this project has been used [node-config](https://www.npmjs.com/package/config) package, there is a _config_ directory to handle the environments; if you need your own configuration please create a _local.json_ file with yours parameters within.
 ```
 vi /config/local.json
 ```
@@ -35,3 +35,8 @@ yarn dev
 ```
 
 In this way the script is listening to the code and restart itself automatically. Furthermore on port 9229 you can attach a debug console.
+
+# Deploy
+```
+yarn start
+```
