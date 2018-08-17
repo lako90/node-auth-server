@@ -1,13 +1,13 @@
 {
-  "name": "oauth2orize-authorization-server",
-  "version": "6.3.4",
-  "author": "Frank Hassanabad <frankhassanabad@gmail.com>",
-  "description": "OAuth2 security recipes and examples based on OAuth2orize",
+  "name": "node-auth-server",
+  "version": "1.0.0",
+  "author": "Luca Perna <lucaprn@gmail.com>",
+  "description": "Authentication and authorization server.",
   "license": "MIT",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/FrankHassanabad/Oauth2orizeRecipes.git"
+    "url": "https://github.com/lako90/node-auth-server"
   },
   "engines": {
     "node": ">=6.7.0",
