@@ -1,13 +1,4 @@
 {
-  "debug": {
-    "enabled": "DEBUG_ENABLED",
-    "nats": {
-      "enabled": "DEBUG_ENABLED"
-    },
-    "http": {
-      "enabled": "DEBUG_ENABLED"
-    }
-  },
   "databases": {
     "uaa": {
       "dialect": "SQL_UAA_DIALECT",

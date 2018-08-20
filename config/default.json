@@ -27,40 +27,14 @@
     }
   },
 
-  "ddos": {
-    "burst": 100000,
-    "limit": 1000000,
-    "dsn": "localhost:4040"
-  },
-
-  "debug": {
-    "enabled": true,
-    "nats": {
-      "enabled": true
-    },
-    "http": {
-      "enabled": true
-    }
-  },
-
-  "general": {
-    "timeToCheckExpiredTokens": 3600
-  },
-
-  "keygen": {
-    "ext_key": "56k1gczixbpy9u7vkjpewu6u5xwd0dx8nq2ujkjj",
-    "int_key": "edvx2f5k53ehfz185mvspjo52sfekt395w100hq2",
-    "port": 80
-  },
-
   "jwt": {
     "accessToken": {
       "expiresIn": 60,
-      "secret": "s3cr3tAcc3ssT0k3n@H1r1sUAA"
+      "secret": "s3cr3tAcc3ssT0k3n@AuthS3rv3r"
     },
     "refreshToken": {
       "expiresIn": 3600,
-      "secret": "s3cr3tR3fr3shT0k3n@H1r1sUAA"
+      "secret": "s3cr3tR3fr3shT0k3n@AuthS3rv3r"
     }
   },
 
@@ -87,10 +61,5 @@
   "server": {
     "logFormat": "dev",
     "port": 8443
-  },
-
-  "session": {
-    "maxAge": 86400000,
-    "secret": "7c0jqjkgy6c4zpoi8hvettrawo1blqh9gb07qa22"
   }
 }
