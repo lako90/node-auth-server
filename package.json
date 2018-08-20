@@ -14,13 +14,10 @@
     "npm": ">=3.10.0"
   },
   "scripts": {
-    "lint": "eslint *.js config db test",
+    "lint": "eslint *.js",
     "start": "node index.js",
     "dev": "nodemon --inspect index.js",
-    "seed": "node app/libraries/seeder",
-    "test": "mocha test test/db test/config",
-    "test:watch": "npm run test -- --watch",
-    "test:integration": "mocha test/integration"
+    "seed": "node app/libraries/seeder"
   },
   "dependencies": {
     "bcrypt": "^3.0.0",
@@ -47,13 +44,13 @@
     "eslint-plugin-import": "^2.2.x",
     "eslint-plugin-jsx-a11y": "^2.2.x",
     "eslint-plugin-react": "^6.7.x",
-    "mocha": "^3.2.x",
     "nodemon": "^1.18.1"
   },
   "keywords": [
     "authentication",
-    "oauth2",
+    "authorization",
     "security",
-    "passport"
+    "passport",
+    "node"
   ]
 }
