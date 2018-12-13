@@ -1,7 +1,7 @@
-Hiris Authorization Server
+General Authorization Server
 ==================
 
-This is the authorization server to Hiris.io.
+This is the authorization server using JWT.
 
 # Installation
 In this guide has been used _Yarn_ as package manager, but if you want you can use _NPM_ instead.
