@@ -1,8 +1,8 @@
-const HirisUAA = require('./app');
+const AuthServer = require('./app');
 
 const logger = require('./app/libraries/logger');
 
-const app = new HirisUAA();
+const app = new AuthServer();
 
 try {
   app.listen();

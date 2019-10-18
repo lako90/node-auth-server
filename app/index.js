@@ -21,7 +21,7 @@ const adminUserConfig = config.get('databases.uaa.adminUser');
 
 require('./libraries/passport');
 
-class HirisUAA {
+class AuthServer {
   constructor() {
     this.initServer();
     this.initMiddlewares();
@@ -33,7 +33,7 @@ class HirisUAA {
     this.server = http.Server(this.app);
     this.io = socket(this.server);
 
-    this.server.on('error', error => HirisUAA.handleServerError(error));
+    this.server.on('error', error => AuthServer.handleServerError(error));
 
     logger.silly('Server initialized');
   }
@@ -146,4 +146,4 @@ class HirisUAA {
   }
 }
 
-module.exports = HirisUAA;
+module.exports = AuthServer;
