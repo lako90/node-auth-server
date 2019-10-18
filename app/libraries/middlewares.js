@@ -19,7 +19,7 @@ const checkAuthorizations = permissions => async (req, res, next) => {
     : [permissions];
 
   /**
-   * Administrator (CircleGarage)
+   * Administrator
    */
   if (requiredPermissions.includes('administrator')) {
     if (await checkAdministrator(user)) {
