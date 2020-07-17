@@ -29,7 +29,7 @@
     "express": "^4.10.x",
     "faker": "^4.1.0",
     "jsonwebtoken": "^7.2.1",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "morgan": "^1.9.1",
     "node-vault": "^0.7.1",
     "passport": "^0.3.x",
