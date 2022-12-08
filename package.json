@@ -26,7 +26,7 @@
     "bcrypt": "^3.0.0",
     "body-parser": "^1.9.x",
     "config": "^1.30.0",
-    "express": "^4.10.x",
+    "express": "^4.17.x",
     "faker": "^4.1.0",
     "jsonwebtoken": "^7.2.1",
     "lodash": "^4.17.13",
